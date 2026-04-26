@@ -17,7 +17,6 @@ export default function SearchScreen({ navigation }) {
   const [error, setError] = useState("");
 
   const handleSearch = async () => {
-    // ❗ VALIDASI
     if (!query || query.trim().length < 3) {
       setError("Minimal 3 karakter");
       return;
@@ -45,7 +44,12 @@ export default function SearchScreen({ navigation }) {
 
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("Detail", { item: show })}
+        onPress={() =>
+          navigation.navigate("Home", {
+            screen: "Detail",
+            params: { item: show },
+          })
+        }
         style={{ marginBottom: 15 }}
       >
         <Image
