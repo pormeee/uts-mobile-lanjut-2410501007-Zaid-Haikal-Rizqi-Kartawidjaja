@@ -1,11 +1,13 @@
-import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import TabNavigator from './src/navigation/TabNavigator';
+import { FavoriteProvider } from './src/context/FavoriteContext';
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <TabNavigator />
-    </NavigationContainer>
+    <FavoriteProvider>
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
+    </FavoriteProvider>
   );
 }
