@@ -2,7 +2,7 @@ import { TouchableOpacity, Image, Text, View, StyleSheet } from "react-native";
 import COLORS from "../constants/colors";
 
 export default function MovieCard({ item, onPress, showDelete, onDelete }) {
-  // 🔥 normalize data (biar bisa dipakai di Home & Search)
+  //  normalize data (biar bisa dipakai di Home & Search)
   const data = item?.show ? item.show : item;
 
   return (
@@ -25,7 +25,6 @@ export default function MovieCard({ item, onPress, showDelete, onDelete }) {
           ⭐ {data.rating?.average || "N/A"}
         </Text>
 
-        {/* Optional tombol hapus (buat Favorites) */}
         {showDelete && (
           <TouchableOpacity onPress={onDelete} style={styles.button}>
             <Text style={styles.buttonText}>Hapus</Text>
