@@ -1,4 +1,5 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const FavoriteContext = createContext();
 
@@ -9,18 +10,18 @@ const initialState = {
 function reducer(state, action) {
   switch (action.type) {
     case "ADD_FAVORITE":
-  const exists = state.favorites.find(
-    (item) => item.id === action.payload.id
-  );
+      const exists = state.favorites.find(
+        (item) => item.id === action.payload.id
+      );
 
-  if (exists) {
-    return state; 
-  }
+      if (exists) {
+        return state;
+      }
 
-  return {
-    ...state,
-    favorites: [...state.favorites, action.payload],
-  };
+      return {
+        ...state,
+        favorites: [...state.favorites, action.payload],
+      };
 
     case "REMOVE_FAVORITE":
       return {
@@ -30,6 +31,12 @@ function reducer(state, action) {
         ),
       };
 
+    case "SET_FAVORITES":
+      return {
+        ...state,
+        favorites: action.payload,
+      };
+
     default:
       return state;
   }
@@ -37,6 +44,41 @@ function reducer(state, action) {
 
 export function FavoriteProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  // 🔥 LOAD DATA SAAT APP DIBUKA
+  useEffect(() => {
+    const loadFavorites = async () => {
+      try {
+        const data = await AsyncStorage.getItem("favorites");
+        if (data) {
+          dispatch({
+            type: "SET_FAVORITES",
+            payload: JSON.parse(data),
+          });
+        }
+      } catch (error) {
+        console.log("Error load favorites:", error);
+      }
+    };
+
+    loadFavorites();
+  }, []);
+
+  // 🔥 SIMPAN SETIAP ADA PERUBAHAN
+  useEffect(() => {
+    const saveFavorites = async () => {
+      try {
+        await AsyncStorage.setItem(
+          "favorites",
+          JSON.stringify(state.favorites)
+        );
+      } catch (error) {
+        console.log("Error save favorites:", error);
+      }
+    };
+
+    saveFavorites();
+  }, [state.favorites]);
 
   return (
     <FavoriteContext.Provider value={{ state, dispatch }}>

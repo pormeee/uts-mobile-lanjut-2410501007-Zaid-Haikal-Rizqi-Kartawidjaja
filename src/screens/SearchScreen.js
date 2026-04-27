@@ -3,12 +3,14 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
   Image,
+  StyleSheet,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import COLORS from "../constants/colors";
 
 export default function SearchScreen({ navigation }) {
   const [query, setQuery] = useState("");
@@ -50,42 +52,99 @@ export default function SearchScreen({ navigation }) {
             params: { item: show },
           })
         }
-        style={{ marginBottom: 15 }}
+        style={styles.card}
       >
         <Image
-          source={{ uri: show.image?.medium }}
-          style={{ width: "100%", height: 200 }}
+          source={{
+            uri:
+              show.image?.medium ||
+              "https://via.placeholder.com/300x200?text=No+Image",
+          }}
+          style={styles.image}
         />
-        <Text>{show.name}</Text>
-        <Text>⭐ {show.rating?.average || "N/A"}</Text>
+        <View style={styles.content}>
+          <Text style={styles.title}>{show.name}</Text>
+          <Text style={styles.rating}>
+            ⭐ {show.rating?.average || "N/A"}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={{ padding: 10 }}>
-      <TextInput
-        placeholder="Cari film..."
-        value={query}
-        onChangeText={setQuery}
-        style={{
-          borderWidth: 1,
-          padding: 10,
-          marginBottom: 10,
-        }}
-      />
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg }}>
+      <View style={{ padding: 12 }}>
 
-      <Button title="Search" onPress={handleSearch} />
+        <TextInput
+          placeholder="Cari film..."
+          value={query}
+          onChangeText={setQuery}
+          style={styles.input}
+        />
 
-      {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
+        <TouchableOpacity onPress={handleSearch} style={styles.button}>
+          <Text style={styles.buttonText}>Search</Text>
+        </TouchableOpacity>
 
-      {loading && <ActivityIndicator size="large" />}
+        {error ? <Text style={styles.error}>{error}</Text> : null}
 
-      <FlatList
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={renderItem}
-      />
-    </View>
+        {loading && <ActivityIndicator size="large" color={COLORS.primary} />}
+
+        <FlatList
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          contentContainerStyle={{ paddingTop: 10 }}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  input: {
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: "white",
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: COLORS.primary,
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  error: {
+    color: "red",
+    marginBottom: 10,
+  },
+  card: {
+    backgroundColor: COLORS.card,
+    borderRadius: 14,
+    overflow: "hidden",
+    marginBottom: 16,
+    elevation: 3,
+  },
+  image: {
+    width: "100%",
+    height: 180,
+  },
+  content: {
+    padding: 10,
+  },
+  title: {
+    fontWeight: "bold",
+    color: COLORS.text,
+  },
+  rating: {
+    color: COLORS.sub,
+  },
+});
