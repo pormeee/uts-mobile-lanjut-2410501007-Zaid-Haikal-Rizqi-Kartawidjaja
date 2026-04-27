@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from "../constants/colors";
+import MovieCard from "../components/MovieCard";
 
 export default function SearchScreen({ navigation }) {
   const [query, setQuery] = useState("");
@@ -41,36 +42,17 @@ export default function SearchScreen({ navigation }) {
     }
   };
 
-  const renderItem = ({ item }) => {
-    const show = item.show;
-
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("Home", {
-            screen: "Detail",
-            params: { item: show },
-          })
-        }
-        style={styles.card}
-      >
-        <Image
-          source={{
-            uri:
-              show.image?.medium ||
-              "https://via.placeholder.com/300x200?text=No+Image",
-          }}
-          style={styles.image}
-        />
-        <View style={styles.content}>
-          <Text style={styles.title}>{show.name}</Text>
-          <Text style={styles.rating}>
-            ⭐ {show.rating?.average || "N/A"}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  const renderItem = ({ item }) => (
+    <MovieCard
+      item={item}
+      onPress={() =>
+        navigation.navigate("Home", {
+          screen: "Detail",
+          params: { item: item.show },
+        })
+      }
+    />
+  );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg }}>

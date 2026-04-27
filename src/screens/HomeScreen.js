@@ -10,7 +10,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context"; 
-
+import MovieCard from "../components/MovieCard";
 
 import { getShows } from "../services/api";
 import COLORS from "../constants/colors";
@@ -59,32 +59,13 @@ export default function HomeScreen({ navigation }) {
     );
   }
 
-  // 🎬 Card UI
+  // 🎬 Card 
   const renderItem = ({ item }) => (
-  <TouchableOpacity
+  <MovieCard
+    item={item}
     onPress={() => navigation.navigate("Detail", { item })}
-    style={styles.card}
-    activeOpacity={0.85}
-  >
-    <Image
-      source={{
-        uri:
-          item.image?.medium ||
-          "https://via.placeholder.com/300x200?text=No+Image",
-      }}
-      style={styles.image}
-    />
-
-    <View style={styles.cardContent}>
-      <Text style={styles.title} numberOfLines={1}>
-        {item.name}
-      </Text>
-      <Text style={styles.rating}>
-        ⭐ {item.rating?.average || "N/A"}
-      </Text>
-    </View>
-    </TouchableOpacity>
-  );
+  />
+);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg }}>
