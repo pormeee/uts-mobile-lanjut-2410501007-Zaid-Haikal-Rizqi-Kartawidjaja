@@ -41,7 +41,7 @@ export default function HomeScreen({ navigation }) {
     fetchData();
   };
 
-  // 🔄 Loading
+  // Loading
   if (loading) {
     return (
       <View style={styles.center}>
@@ -50,7 +50,7 @@ export default function HomeScreen({ navigation }) {
     );
   }
 
-  // ❌ Error
+  // Error
   if (error) {
     return (
       <View style={styles.center}>
@@ -59,7 +59,7 @@ export default function HomeScreen({ navigation }) {
     );
   }
 
-  // 🎬 Card 
+  // Card 
   const renderItem = ({ item }) => (
   <MovieCard
     item={item}
