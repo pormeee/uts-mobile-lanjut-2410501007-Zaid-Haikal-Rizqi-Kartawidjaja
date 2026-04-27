@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     color: COLORS.text,
   },
 
-  // 📝 CARD
+  // CARD
   card: {
     backgroundColor: COLORS.card,
     padding: 14,
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 
-  // ❤️ BUTTON
+  // BUTTON
   button: {
     padding: 14,
     borderRadius: 12,
