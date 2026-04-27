@@ -45,7 +45,7 @@ function reducer(state, action) {
 export function FavoriteProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  // 🔥 LOAD DATA SAAT APP DIBUKA
+  // LOAD DATA SAAT APP DIBUKA
   useEffect(() => {
     const loadFavorites = async () => {
       try {
@@ -64,7 +64,7 @@ export function FavoriteProvider({ children }) {
     loadFavorites();
   }, []);
 
-  // 🔥 SIMPAN SETIAP ADA PERUBAHAN
+  // SIMPAN SETIAP ADA PERUBAHAN
   useEffect(() => {
     const saveFavorites = async () => {
       try {
