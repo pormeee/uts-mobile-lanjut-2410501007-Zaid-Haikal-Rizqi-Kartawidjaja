@@ -50,7 +50,7 @@ export default function HomeScreen({ navigation }) {
     selectedGenre === "All"
       ? data
       : data.filter((item) =>
-          item.genres?.includes(selectedGenre)
+          item.genres && item.genres.includes(selectedGenre)
         );
 
   // Loading
@@ -66,7 +66,20 @@ export default function HomeScreen({ navigation }) {
   if (error) {
     return (
       <View style={styles.center}>
-        <Text style={{ color: "red" }}>{error}</Text>
+        <Text style={{ color: "red", marginBottom: 10 }}>
+          {error}
+        </Text>
+
+        <TouchableOpacity
+          onPress={fetchData}
+          style={{
+            backgroundColor: COLORS.primary,
+            padding: 10,
+            borderRadius: 8,
+          }}
+        >
+          <Text style={{ color: "white" }}>Coba Lagi</Text>
+        </TouchableOpacity>
       </View>
     );
   }
