@@ -6,10 +6,9 @@ import {
   ActivityIndicator,
   RefreshControl,
   TouchableOpacity,
-  Image,
   StyleSheet,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context"; 
+import { SafeAreaView } from "react-native-safe-area-context";
 import MovieCard from "../components/MovieCard";
 
 import { getShows } from "../services/api";
@@ -19,6 +18,11 @@ export default function HomeScreen({ navigation }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // FILTER STATE
+  const [selectedGenre, setSelectedGenre] = useState("All");
+
+  const genres = ["All", "Drama", "Comedy", "Action", "Thriller"];
 
   const fetchData = async () => {
     try {
@@ -41,6 +45,14 @@ export default function HomeScreen({ navigation }) {
     fetchData();
   };
 
+  // FILTER LOGIC
+  const filteredData =
+    selectedGenre === "All"
+      ? data
+      : data.filter((item) =>
+          item.genres?.includes(selectedGenre)
+        );
+
   // Loading
   if (loading) {
     return (
@@ -59,18 +71,42 @@ export default function HomeScreen({ navigation }) {
     );
   }
 
-  // Card 
+  // Card
   const renderItem = ({ item }) => (
-  <MovieCard
-    item={item}
-    onPress={() => navigation.navigate("Detail", { item })}
-  />
-);
+    <MovieCard
+      item={item}
+      onPress={() => navigation.navigate("Detail", { item })}
+    />
+  );
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg }}>
+
+      {/* FILTER UI */}
+      <View style={styles.filterContainer}>
+        {genres.map((genre) => (
+          <TouchableOpacity
+            key={genre}
+            onPress={() => setSelectedGenre(genre)}
+            style={[
+              styles.filterButton,
+              selectedGenre === genre && styles.activeFilter,
+            ]}
+          >
+            <Text
+              style={[
+                styles.filterText,
+                selectedGenre === genre && styles.activeText,
+              ]}
+            >
+              {genre}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
       <FlatList
-        data={data}
+        data={filteredData} //  pakai filtered
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         contentContainerStyle={{ padding: 12 }}
@@ -89,27 +125,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  card: {
-    backgroundColor: COLORS.card,
-    borderRadius: 14,
-    overflow: "hidden",
-    marginBottom: 16,
-    elevation: 3,
+
+  // FILTER STYLE
+  filterContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    padding: 10,
   },
-  image: {
-    width: "100%",
-    height: 200,
+  filterButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    backgroundColor: "#ccc",
+    borderRadius: 20,
+    marginRight: 8,
+    marginBottom: 8,
   },
-  cardContent: {
-    padding: 12,
+  activeFilter: {
+    backgroundColor: COLORS.primary,
   },
-  title: {
-    fontSize: 16,
+  filterText: {
+    fontSize: 12,
+  },
+  activeText: {
+    color: "white",
     fontWeight: "bold",
-    color: COLORS.text,
-  },
-  rating: {
-    marginTop: 4,
-    color: COLORS.sub,
   },
 });
